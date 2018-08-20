@@ -10,29 +10,29 @@ Learning code for [Golang_Puzzlers](https://github.com/hyper0x/Golang_Puzzlers)
 echo $GOPATH
 ```
 
-### Add this path to GOPATH
+### Add this path to `GOPATH`
 
 ```
-export GOPATH=$GOPATH:/your-home/path-to/part1
+export GOPATH=$GOPATH:/your-home/path-to/golang-learn
 ```
 
 ### Install libs
 
 ```
-go install libs
+go install part1/libs
 ```
 
-This will create a folder ./part1/pkg
+This will create a folder like `./pkg/darwin_amd64/part1`
 
 ### Run main.go
 
 ```
-go run part1/src/main.go -name "Simon" -n 9
+go run src/part1/main.go -name "Simon" -n 9
 ```
 
 ### Build and run main
 
 ```
-go build part1/src/main.go 
+go build src/part1/main.go 
 ./main -name "Simon" -n 9
 ```

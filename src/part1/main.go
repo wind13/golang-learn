@@ -4,8 +4,9 @@ import (
   "flag"
   "fmt"
   "os"
-  "libs"
+  "part1/libs"
 )
+// import "./part1/libs/hello"
 
 var name string
 var n float64
@@ -21,7 +22,8 @@ func main() {
     flag.PrintDefaults()
   }
   flag.Parse()
-  // fmt.Printf("Hello, %s!\nRandom:%s!\nTime:%s\n", name, rand.Intn(10), time.Now())
+  fmt.Printf("Learning golang...\n")
+  // Hello(name)
   libs.Hello(name)
   libs.Now()
   libs.Random()
