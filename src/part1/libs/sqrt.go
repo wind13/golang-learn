@@ -6,5 +6,7 @@ import (
 )
 
 func Sqrt(n float64) {
-  fmt.Printf("sqrt: %g", math.Sqrt(n))
+  var s = math.Sqrt(n)
+  fmt.Printf("sqrt: %v\n", s)
+  // fmt.Printf("sqrt: %g\n", s)
 }
