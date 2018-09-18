@@ -27,12 +27,12 @@ This will create a folder like `./pkg/darwin_amd64/part1`
 ### Run main.go
 
 ```
-go run src/part1/main.go -name "Simon" -n 9
+go run src/part1/main.go -name "Simon" -n 49
 ```
 
 ### Build and run main
 
 ```
 go build src/part1/main.go 
-./main -name "Simon" -n 9
+./main -name "Simon" -n 25
 ```
