@@ -6,11 +6,6 @@ import (
 	"time"
 )
 
-var queue = make(chan Job)
-var successes = make(chan map[string]string)
-var errors = make(chan map[string]string)
-var history = History{h: make(map[string]Job)}
-
 type Fetcher interface {
 	// Fetch returns the body of URL and
 	// a slice of URLs found on that page.
@@ -29,7 +24,7 @@ type History struct {
 }
 
 // Inc increments the history
-func (c *History) Add(url string, depth int) {
+func (c *History) Add(url string, depth int, queue chan Job) {
 	c.mux.Lock()
 	// Lock so only one goroutine at a time can access the map c.v.
 	_, exist := c.h[url]
@@ -41,7 +36,7 @@ func (c *History) Add(url string, depth int) {
 	c.mux.Unlock()
 }
 
-func fetchWeb(url string, depth int, fetcher Fetcher) {
+func fetchWeb(url string, depth int, fetcher Fetcher, queue chan Job, successes chan map[string]string, errors chan map[string]string, history *History) {
 	if depth <= 0 {
 		return
 	}
@@ -55,23 +50,28 @@ func fetchWeb(url string, depth int, fetcher Fetcher) {
 	successes <- map[string]string{url: body}
 	for _, u := range uris {
 		// go Crawl(u, depth-1, fetcher)
-		history.Add(u, depth-1)
+		history.Add(u, depth-1, queue)
 	}
 }
 
 // Crawl uses fetcher to recursively crawl
 // pages starting with url, to a maximum of depth.
 func Crawl(url string, depth int, fetcher Fetcher) {
+	queue := make(chan Job)
+	successes := make(chan map[string]string)
+	errors := make(chan map[string]string)
+	history := History{h: make(map[string]Job)}
+
 	quit := time.After(3 * time.Second) // Timeout
 	// Fetch URLs in parallel.
 	// Don't fetch the same URL twice.
 	// This implementation doesn't do either:
-	go history.Add("https://golang.org/", 4)
+	go history.Add("https://golang.org/", 4, queue)
 	for {
 		select {
 		case q := <-queue:
 			// fmt.Println(q)
-			go fetchWeb(q.url, q.depth, fetcher)
+			go fetchWeb(q.url, q.depth, fetcher, queue, successes, errors, &history)
 		case s := <-successes:
 			for url, body := range s {
 				fmt.Println(url, body)
