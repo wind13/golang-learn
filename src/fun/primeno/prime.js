@@ -1,0 +1,1 @@
+var i, j, k, n: longint; l: array[1..1000000]of boolean; su: array[1..500000]of longint; begin k:= 0; fillchar(l, sizeof(l), true); readln(n); for i:= 2 to trunc(sqrt(n)) do if l[i] then for j:= 2 to n div i do l[i * j]:=false; for i:= 2 to n do if l[i] then begin inc(k); su[k]:=i; end; writeln(k); for i:= 1 to k do write(su[i]: 8); end.
